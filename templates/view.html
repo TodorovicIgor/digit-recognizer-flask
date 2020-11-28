@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=
+            "width=device-width, initial-scale=1.0">
+    <style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    </style>
+</head>
+
+<body>
+      <h1>Drawing</h1>
+    <hr>
+    <div id="container">
+    </div>
+    <br>
+      <button onclick="submitFunc()">submit</button>
+    <br>
+    <br>
+
+      <h3>SVC: {{ svc_num }}</h3>
+      <h3>CNN: {{ cnn_num }}</h3>
+
+</body>
+<script>
+createTable("drawing-table", "container", 28);
+
+function createTable(id, where, length) {
+  var table = "<table id='" + id + "'><tr>";
+  for (var i = 0; i < length; i++) {
+  	table += "<tr>";
+  	for (var j = 0; j < length; j++) {
+    	table = table + "<td id='"+ i + "," + j +"' style='height:10px;width:10px;background-color: green;' ></td>";
+    }
+    table += "</tr>";
+  }
+  table = table + "<tbody></tbody></table>";
+  document.getElementById(where).innerHTML += table;
+}
+
+var theTable = document.getElementById("drawing-table");
+
+theTable.addEventListener("mousedown", function(e) {
+    if (e.target.tagName === 'TD') {
+        mouseDownState = true;
+    }
+});
+
+theTable.addEventListener("mouseover", function(e) {
+    if (e.target.tagName === 'TD') {
+        if (mouseDownState) {
+            e.target.style.backgroundColor = 'red';
+        }
+    }
+});
+
+document.addEventListener("mouseup", function() {
+    mouseDownState = false;
+});
+
+var mouseDownState = false;
+
+function submitFunc(){
+    retString = '?'
+    for (let i = 0; i < 28; i++){
+        for (let j = 0; j < 28; j++){
+            if (document.getElementById(i+','+j).style.backgroundColor == 'green'){
+                retString += i+','+j+'=0&'
+            }
+            else{
+                retString += i+','+j+'=255&'
+            }
+
+        }
+    }
+    window.location.replace("http://127.0.0.1:5000/"+retString)
+}
+
+</script>
+</html>
